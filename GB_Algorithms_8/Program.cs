@@ -39,31 +39,40 @@ namespace GB_Algorithms_8
             }
         }
 
-        // Не доделан
+        /// <summary>
+        /// Метод сортировки Хоара
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
         static void Quicksort(int[] arr, int start, int end)
         {
-            int middle = (end - start) / 2;
-            while (start != end - 1)
+            int middle = arr[(end - start) / 2 + start];
+            int temp;
+            int S = start;
+            int E = end;
+            while (S <= E)
             {
-                while (arr[start] <= arr[middle] && start < middle - 1)
+                while (arr[S] < middle && S <= end)
                 {
-                    start++;
+                    ++S;
                 }
-                while (arr[end] > arr[middle] && end > middle)
+                while (arr[E] > middle && E >= start)
                 {
-                    end--;
+                    --E;
                 }
-                if (arr[start] > arr[end])
+                if (S <= E)
                 {
-                    arr[start] = arr[start] ^ arr[end];
-                    arr[end] = arr[end] ^ arr[start];
-                    arr[start] = arr[start] ^ arr[end];
+                    temp = arr[S];
+                    arr[S] = arr[E];
+                    arr[E] = temp;
+                    ++S;
+                    --E;
                 }
             }
-            if (start < middle - 1) Quicksort(arr, start, middle - 1);
-            if (middle < end) Quicksort(arr, middle, end);
+            if (E > start) Quicksort(arr, start, E);
+            if (S < end) Quicksort(arr, S, end);
         }
-
 
         /// <summary>
         /// Метод заполняет массив случайными числами от 0 до max
