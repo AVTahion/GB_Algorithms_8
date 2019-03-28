@@ -19,7 +19,7 @@ namespace GB_Algorithms_8
     class Program
     {
         /// <summary>
-        /// Метод сортировки посчетом.
+        /// Метод сортировки подсчетом.
         /// </summary>
         /// <param name="arr"></param>
         static void CountingSort(int[] arr)
@@ -55,23 +55,63 @@ namespace GB_Algorithms_8
             {
                 while (arr[S] < middle && S <= end)
                 {
-                    ++S;
+                    S++;
                 }
                 while (arr[E] > middle && E >= start)
                 {
-                    --E;
+                    E--;
                 }
                 if (S <= E)
                 {
                     temp = arr[S];
                     arr[S] = arr[E];
                     arr[E] = temp;
-                    ++S;
-                    --E;
+                    S++;
+                    E--;
                 }
             }
             if (E > start) Quicksort(arr, start, E);
             if (S < end) Quicksort(arr, S, end);
+        }
+
+        /// <summary>
+        /// Метод сортировки слиянием
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <returns></returns>
+        static int[] MergeSort(int[] arr)
+        {
+            if (arr.Length == 1)
+            {
+                return arr;
+            }
+            int middle = arr.Length / 2;
+            return Merge(MergeSort(arr.Take(middle).ToArray()), MergeSort(arr.Skip(middle).ToArray()));
+        }
+
+        /// <summary>
+        /// Метод слияния подмассивов
+        /// </summary>
+        /// <param name="arr1"></param>
+        /// <param name="arr2"></param>
+        /// <returns></returns>
+        static int[] Merge(int[] arr1, int[] arr2)
+        {
+            int ptr1 = 0, ptr2 = 0;
+            int[] merged = new int[arr1.Length + arr2.Length];
+
+            for (int i = 0; i < merged.Length; i++)
+            {
+                if (ptr1 < arr1.Length && ptr2 < arr2.Length)
+                {
+                    merged[i] = arr1[ptr1] > arr2[ptr2] ? arr2[ptr2++] : arr1[ptr1++];
+                }
+                else
+                {
+                    merged[i] = ptr2 < arr2.Length ? arr2[ptr2++] : arr1[ptr1++];
+                }
+            }
+            return merged;
         }
 
         /// <summary>
@@ -113,6 +153,10 @@ namespace GB_Algorithms_8
 
             Array.Copy(referenceArray, arr1, referenceArray.Length);
             Quicksort(arr1, 0, arr1.Length - 1);
+            PrintArr(arr1);
+
+            Array.Copy(referenceArray, arr1, referenceArray.Length);
+            arr1 = MergeSort(arr1);
             PrintArr(arr1);
 
             Console.ReadKey();
